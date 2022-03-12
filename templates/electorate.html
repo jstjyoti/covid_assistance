@@ -1,0 +1,186 @@
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+  
+  
+
+
+
+
+		<style>
+			table {
+			  font-family: arial, sans-serif;
+			  border-collapse: collapse;
+			  width: 100%;
+			}
+            .Container{
+				margin-top: 15px;
+			}
+			.Row{
+				margin-left: 5px;
+			}
+			td, th {
+			  border: 1px solid #dddddd;
+			  text-align: left;
+			  padding: 8px;
+			}
+
+			tr:nth-child(even) {
+			  background-color: #dddddd;
+			}
+			label{
+				float : left;
+			}
+		</style>		
+
+
+	</head>
+		
+
+	<body>
+
+
+		<div class="container">
+
+
+			<div class="jumbotron jumbotron-fluid container_black_text">
+				
+						<p class="thick">
+							Search by year, district and constituency.<br>
+							The years are 1952, 1956, 1958, 1959, 1961, 1966, 1967, 1968, 1970, 1971
+						</p>
+						<p class="normal">
+							Then download the pdf to check if the name you are looking for is present in the file.
+						</p>	
+						<p class="thick">
+							সাল, জেলা আর নির্বাচনী এলাকা দিয়ে খুঁজতে থাকুন।<br>
+						</p>
+
+				
+			</div>
+		</div>
+			<div class="container">
+				<div class="container">
+
+						<div style="float:left;">
+							<input type="text" id="myYearInput" onkeyup="mySearchFunction()" placeholder="Search by year.." title="Type in a volunteer">
+						</div>
+						<div style="float:left;">
+							<input type="text" id="myDistrictInput" onkeyup="mySearchFunction()" placeholder="Search for district.." title="Type in a district">
+						</div>
+
+						<div style="float:left;">
+							<input type="text" id="myConstInput" onkeyup="mySearchFunction()" placeholder="Search for constituency.." title="Type in a constituency">
+						</div>
+					</div>
+				<div class='container'>				
+					<table id="vlistTable" class="table">
+					  <tr>
+					  	<th>Year</th>
+					    <th>District</th>
+					    <th>Constituency</th>			    		    
+					    <th>Link</th>					  
+					  </tr>
+					  
+					  {% for item in items %}		  
+					  <tr>
+					  	<td>{{item.year}}</td>
+					  	<td>{{item.district}}</td>
+					  	<td>{{item.constituency}}</td>		
+					  	<td>{% for link in item.new_links%}
+					  		 <a href="{{link}}" style="color:#0000ff;">Link To PDF</a><br>
+					  		{% endfor %}
+					  	</td>
+					  </tr>
+					  {% endfor %}
+						</table>
+					
+				</div>
+			</div>
+			
+			<!-- add rest here -->
+			<div class="container_black_text" style = "justify-content: center;margin-top: 10px;">
+					
+			</div>
+		</div>
+
+
+		
+		<script>
+		function mySearchFunction() {
+		  var input, filter, table, tr, td, i, txtValue;
+		  input = document.getElementById("myYearInput");
+		  filter = input.value.toUpperCase();
+
+		  district_in=document.getElementById("myDistrictInput");
+		  filter_district=district_in.value.toUpperCase()
+
+		  var const_in=document.getElementById("myConstInput");
+		  var filter_const=const_in.value.toUpperCase()
+
+
+		  table = document.getElementById("vlistTable");
+		  tr = table.getElementsByTagName("tr");
+
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[0];
+		    td_dist = tr[i].getElementsByTagName("td")[1];
+		    td_const = tr[i].getElementsByTagName("td")[2];
+
+		    if (td) {
+		      txtValue = td.textContent || td.innerText;
+		      
+		      if (txtValue.toUpperCase().indexOf(filter) > -1 ) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }
+
+		    if(tr[i].style.display == ""){
+		    	if (td_dist){
+		    	// console.log("inside")
+		    	dist_val=td_dist.innerText
+		    	if (dist_val.toUpperCase().indexOf(filter_district) > -1 ) {
+			        tr[i].style.display = "";
+			      } else {
+			        tr[i].style.display = "none";
+			      }
+			    }
+		    }
+
+		    if(tr[i].style.display == ""){
+		    	if (td_const){
+		    	// console.log("inside")
+		    	const_val=td_const.innerText
+		    	if (const_val.toUpperCase().indexOf(filter_const) > -1 ) {
+			        tr[i].style.display = "";
+			      } else {
+			        tr[i].style.display = "none";
+			      }
+			    }
+		    }
+
+		  }
+	}
+		</script> 
+
+		
+
+
+
+	</body>
+
+</html>
